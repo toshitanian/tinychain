@@ -1,5 +1,3 @@
-# ref: https://medium.com/crypto-currently/lets-build-the-tiniest-blockchain-e70965a248b
-
 import hashlib as hasher
 import datetime as date
 
@@ -20,9 +18,26 @@ class Block:
         sha.update(seed.encode('utf-8'))
         return sha.hexdigest()
 
+    def to_json(self):
+        return {
+            "index": self.index,
+            "timestamp": self.timestamp.isoformat(),
+            "data": self.data,
+            "previous_hash": self.previous_hash,
+            "hash": self.hash
+        }
+
     @classmethod
     def create_genesis_block(cls):
-        return Block(0, date.datetime.now(), "Genesis Block", "0")
+        data = {
+            "proof-of-work": 9,
+            "transactions": None
+        }
+        return Block(
+            0, date.datetime.now(),
+            data,
+            "0"
+        )
 
     def next_block(self, data):
         next_index = self.index + 1
